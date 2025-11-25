@@ -91,7 +91,7 @@ namespace session5demo.pl.Controllers.EmployeeController
 
             
         }
-        [Authorize(Roles ="admin")]
+        
         public IActionResult Edit(int ?id)
         {
             if (id is null) return BadRequest();
