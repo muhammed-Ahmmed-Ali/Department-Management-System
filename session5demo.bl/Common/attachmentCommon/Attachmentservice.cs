@@ -10,19 +10,19 @@ namespace session5demo.bl.Common.attachmentCommon
 {
     public class Attachmentservice : Iattachmentservice
     {
-     //   private readonly List<string> extension = new List<string>() { ".png", ".JPG", ".jpeg" };
-       // private const int maxsize = 2_852_158;
+       private readonly List<string> extension = new List<string>() { ".png", ".JPG", ".jpeg" };
+        private const int maxsize = 2_852_158;
         public string addattachment(IFormFile file, string folder)
         {
             var ex = Path.GetExtension(file.FileName);
-            //if(!extension.Contains(ex))
-            //{
-            //    throw new Exception("not valid");
-            //}
-            //if (file.Length>maxsize)
-            //{
-            //    throw new Exception("not valid size");
-            //}
+            if (!extension.Contains(ex))
+            {
+                throw new Exception("not valid");
+            }
+            if (file.Length > maxsize)
+            {
+                throw new Exception("not valid size");
+            }
             var folderpath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", folder);
             if (!Directory.Exists(folderpath))
             {

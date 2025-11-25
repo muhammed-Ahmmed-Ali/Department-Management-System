@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using session5demo.dl.Models.AuthModel;
+using session5demo.dl.Models.AuthModel;
 using session5demo.dl.Models.DepartmentModels;
 using session5demo.dl.Models.EmployeeModels;
 using System;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace session5demo.dl.Contexts
 {
-    public class demoContexsts:IdentityDbContext<ApplicationUser,IdentityRole, string>
+    public class demoContexsts:IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
         public demoContexsts(DbContextOptions<demoContexsts> options) : base(options)
         {

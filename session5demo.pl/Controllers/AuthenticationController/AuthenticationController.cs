@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using session5demo.dl.Models.AuthModel;
+using session5demo.dl.Models.AuthModel;
 using session5demo.pl.Helper;
 using session5demo.pl.ViewModels.AuthVm;
 
@@ -13,7 +14,7 @@ namespace session5demo.pl.Controllers.AuthenticationController
         private readonly UserManager<ApplicationUser> usermanager;
         private readonly SignInManager<ApplicationUser> signInManager;
 
-        public AccountController(UserManager<ApplicationUser> usermanager,SignInManager<ApplicationUser>signInManager)
+        public AccountController(UserManager<ApplicationUser> usermanager, SignInManager<ApplicationUser> signInManager)
         {
             this.usermanager = usermanager;
             this.signInManager = signInManager;
@@ -33,9 +34,9 @@ namespace session5demo.pl.Controllers.AuthenticationController
                 LastName = model.LastName,
                 UserName = model.UserName,
                 Email = model.Email,
-                
+
             };
-            var createuser = usermanager.CreateAsync(user,model.Password).Result;
+            var createuser = usermanager.CreateAsync(user, model.Password).Result;
             if (createuser.Succeeded)
             {
                 return RedirectToAction("Login");
@@ -48,7 +49,7 @@ namespace session5demo.pl.Controllers.AuthenticationController
                 }
                 return View(model);
             }
-            
+
         }
         [HttpGet]
         public IActionResult Login()
@@ -60,24 +61,24 @@ namespace session5demo.pl.Controllers.AuthenticationController
             else
             {
                 ViewData["login"] = "you are signed in";
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index", "Home");
             }
         }
         [HttpPost]
         public IActionResult Login(LoginVm model)
         {
-            if(!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid) return View(model);
             var email = usermanager.FindByEmailAsync(model.Email).Result;
-            if(email is not null)
+            if (email is not null)
             {
-                var flag = usermanager.CheckPasswordAsync(email,model.Password).Result;
+                var flag = usermanager.CheckPasswordAsync(email, model.Password).Result;
                 if (flag)
                 {
-                    var login = signInManager.PasswordSignInAsync(email, model.Password, model.RememberMe,lockoutOnFailure:false).Result;
+                    var login = signInManager.PasswordSignInAsync(email, model.Password, model.RememberMe, lockoutOnFailure: false).Result;
                     if (login.IsNotAllowed)
                     {
                         ModelState.AddModelError(string.Empty, "cant login , something went wrong!");
-                      
+
 
                     }
                     if (login.IsLockedOut)
@@ -123,7 +124,7 @@ namespace session5demo.pl.Controllers.AuthenticationController
 
                     };
                     Helper.Helper.sendemail(email);
-                   return RedirectToAction("CheckYourInpox");
+                    return RedirectToAction("CheckYourInpox");
                 }
             }
             ModelState.AddModelError(string.Empty, "notvalid");
@@ -134,7 +135,7 @@ namespace session5demo.pl.Controllers.AuthenticationController
             return View();
         }
         [HttpGet]
-        public IActionResult ResetPassword(String email,string token)
+        public IActionResult ResetPassword(String email, string token)
         {
             TempData["email"] = email;
             TempData["token"] = token;
@@ -143,14 +144,14 @@ namespace session5demo.pl.Controllers.AuthenticationController
         [HttpPost]
         public IActionResult ResetPassword(ResetPasswordViewModel model)
         {
-           var email= TempData["email"]as string;
+            var email = TempData["email"] as string;
             var token = TempData["token"] as string;
             if (ModelState.IsValid)
             {
                 var user = usermanager.FindByEmailAsync(email).Result;
-                if(user is not null)
+                if (user is not null)
                 {
-                   var rest= usermanager.ResetPasswordAsync(user, token, model.Password).Result;
+                    var rest = usermanager.ResetPasswordAsync(user, token, model.Password).Result;
                     if (rest.Succeeded)
                     {
                         return RedirectToAction("Login");
@@ -166,7 +167,7 @@ namespace session5demo.pl.Controllers.AuthenticationController
                     ModelState.AddModelError(string.Empty, "something went wrong");
                     return View(model);
                 }
-                   
+
             }
             ModelState.AddModelError(string.Empty, "something went wrong");
             return View(model);
